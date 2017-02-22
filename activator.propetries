@@ -1,0 +1,4 @@
+name=neo4j-akka-http-starter-kit
+title= Starting with Neo4j and Scala with Akka-http.
+description=This is an activator project for showcasing how to start with Neo4j and Scala with Akka-http.
+tags=Scala,neo4j,scalatest,neo4j-driver,Akka,http,Akka-http
