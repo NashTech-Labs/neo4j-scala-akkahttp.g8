@@ -8,8 +8,16 @@ Neo4j database must have been installed on your system and the password can be s
 
 ## How to run this :
 
-There are two ways to run this project 
+There are two ways to test this project 
   
          activator test
          
          sbt test
+
+There are two ways to run this project 
+  
+         activator run
+         
+         sbt run
+
+After running this, you can hit its endpoint for performing the operation.
