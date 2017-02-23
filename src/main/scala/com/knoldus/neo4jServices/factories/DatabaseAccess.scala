@@ -26,10 +26,10 @@ trait DatabaseAccess {
     result.consume().counters().nodesCreated()
   }
 
-  def retrieveRecord(name: String): Option[User] = {
+  def retrieveRecord(email: String): Option[User] = {
     val driver = GraphDatabase.driver(neo4jUrl, AuthTokens.basic(userName, userPassword))
     val session = driver.session
-    val script = s"MATCH (a:Users) WHERE a.name = '$name' RETURN a.name AS name, a.email AS " +
+    val script = s"MATCH (a:Users) WHERE a.email = '$email' RETURN a.name AS name, a.email AS " +
                  s"email, a.age AS age, a.city AS city"
     val result = session.run(script)
     val record_data: Option[User] = if (result.hasNext()) {

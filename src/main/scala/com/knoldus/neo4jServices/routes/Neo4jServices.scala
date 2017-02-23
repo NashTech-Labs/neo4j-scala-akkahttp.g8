@@ -45,14 +45,14 @@ trait Neo4jService extends DatabaseAccess {
             }
           }
       }
-    } ~ path("get" / "name" / Segment) { (name: String) =>
+    } ~ path("get" / "email" / Segment) { (email: String) =>
       get {
         complete {
           try {
-            val idAsRDD: Option[User] = retrieveRecord(name)
+            val idAsRDD: Option[User] = retrieveRecord(email)
             idAsRDD match {
               case Some(data) =>
-                HttpResponse(StatusCodes.OK, entity = data.email)
+                HttpResponse(StatusCodes.OK, entity = data.name)
               case None => HttpResponse(StatusCodes.InternalServerError,
                 entity = s"Data is not fetched and something went wrong")
             }
@@ -60,7 +60,7 @@ trait Neo4jService extends DatabaseAccess {
             case ex: Throwable =>
               logger.error(ex, ex.getMessage)
               HttpResponse(StatusCodes.InternalServerError,
-                entity = s"Error found for user : $name")
+                entity = s"Error found for user : $email")
           }
         }
       }

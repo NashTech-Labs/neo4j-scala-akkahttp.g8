@@ -64,8 +64,8 @@ class Neo4jServicesSpec
     }
 
     "to be able to retrieve data via cypher" in {
-      Get("/get/name/Anurag") ~> neo4jRoutes ~> check {
-        responseAs[String].contains("anurag.rbl.06@gmail.com") shouldEqual true
+      Get("/get/email/anurag.rbl.06@gmail.com") ~> neo4jRoutes ~> check {
+        responseAs[String].contains("Anurag") shouldEqual true
       }
     }
 
