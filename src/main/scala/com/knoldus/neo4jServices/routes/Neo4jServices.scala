@@ -2,13 +2,23 @@ package com.knoldus.neo4jServices.routes
 
 import akka.actor.ActorSystem
 import akka.event.Logging
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.{ExceptionHandler, Route}
 import akka.stream.ActorMaterializer
-import com.knoldus.neo4jServices.factories.DatabaseAccess
+import com.knoldus.neo4jServices.factories.{DatabaseAccess, User}
+import spray.json.DefaultJsonProtocol
+
+
+
+object UserJsonSupport extends DefaultJsonProtocol with SprayJsonSupport {
+  implicit val PortofolioFormats = jsonFormat4(User)
+}
 
 trait Neo4jService extends DatabaseAccess {
+
+  import UserJsonSupport._
 
   implicit val system: ActorSystem
   implicit val materializer: ActorMaterializer
@@ -25,27 +35,28 @@ trait Neo4jService extends DatabaseAccess {
   }
 
   val neo4jRoutes: Route = {
-    get {
-      path("insert" / "name" / Segment / "email" / Segment / "age" / Segment / "city" / Segment) {
-        (name: String, email: String, age: String, city: String) =>
+    post {
+      path("insert") {
+        entity(as[User]) { entity =>
           complete {
             try {
-              val user = User(name, email, age.toInt, city)
-              val isPersisted = insertRecord(user)
+              val isPersisted: Int = insertRecord(entity)
               isPersisted match {
                 case 1 => HttpResponse(StatusCodes.Created,
-                  entity = s"Data is successfully persisted")
+                  entity = "Data is successfully persisted")
                 case _ => HttpResponse(StatusCodes.InternalServerError,
-                  entity = s"Error found")
+                  entity = "Error while persisting data")
               }
             } catch {
               case ex: Throwable =>
                 logger.error(ex, ex.getMessage)
-                HttpResponse(StatusCodes.InternalServerError, entity = s"Error found")
+                HttpResponse(StatusCodes.InternalServerError,
+                  entity = "Error while persisting data")
             }
           }
+        }
       }
-    } ~ path("get" / "email" / Segment) { (email: String) =>
+    }  ~ path("get" / "email" / Segment) { (email: String) =>
       get {
         complete {
           try {

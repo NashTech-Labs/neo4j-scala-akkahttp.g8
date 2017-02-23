@@ -2,6 +2,8 @@
 
 package com.knoldus.neo4jServices
 
+import akka.http.scaladsl.model.HttpEntity
+import akka.http.scaladsl.model.MediaTypes._
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import com.knoldus.neo4jServices.routes.Neo4jService
 import org.neo4j.driver.v1.{AuthTokens, GraphDatabase}
@@ -31,33 +33,79 @@ class Neo4jServicesSpec
   "The service" should {
 
     "be able to insert data in the neo4j" in {
-      Get("/insert/name/Anurag/email/anurag.rbl.06@gmail.com/age/25/city/Jaipur") ~> neo4jRoutes ~>
+
+      val json_data =
+        """{
+          |"name":"Anurag",
+          |"email":"anurag.rbl.06@gmail.com",
+          |"age":25,
+          |"city":"Jaipur"
+          |}""".stripMargin
+      Post("/insert", HttpEntity(`application/json`, json_data)) ~>
+      neo4jRoutes ~>
       check {
         responseAs[String].contains("Data is successfully persisted") shouldEqual true
       }
     }
 
     "be able to insert data_0 in the neo4j" in {
-      Get("/insert/name/Manish/email/manish@gmail.com/age/26/city/Jaipur") ~> neo4jRoutes ~> check {
+
+      val json_data =
+        """{
+          |"name":"Manish",
+          |"email":"manish@gmail.com",
+          |"age":26,
+          |"city":"Jaipur"
+          |}""".stripMargin
+      Post("/insert", HttpEntity(`application/json`, json_data)) ~>
+      neo4jRoutes ~>
+      check {
         responseAs[String].contains("Data is successfully persisted") shouldEqual true
       }
+
     }
 
     "be able to insert data_1 in the neo4j" in {
-      Get("/insert/name/Shivansh/email/shivansh@gmail.com/age/22/city/Lucknow") ~> neo4jRoutes ~>
+      val json_data =
+        """{
+          |"name":"Shivansh",
+          |"email":"shivansh@gmail.com",
+          |"age":22,
+          |"city":"Lucknow"
+          |}""".stripMargin
+      Post("/insert", HttpEntity(`application/json`, json_data)) ~>
+      neo4jRoutes ~>
       check {
         responseAs[String].contains("Data is successfully persisted") shouldEqual true
       }
     }
 
     "be able to insert data_2 in the neo4j" in {
-      Get("/insert/name/Gaurav/email/gaurav@gmail.com/age/23/city/Kanpur") ~> neo4jRoutes ~> check {
+      val json_data =
+        """{
+          |"name":"Gaurav",
+          |"email":"gaurav@gmail.com",
+          |"age":23,
+          |"city":"Kanpur"
+          |}""".stripMargin
+      Post("/insert", HttpEntity(`application/json`, json_data)) ~>
+      neo4jRoutes ~>
+      check {
         responseAs[String].contains("Data is successfully persisted") shouldEqual true
       }
+
     }
 
     "be able to insert data_3 in the neo4j" in {
-      Get("/insert/name/Sandy/email/phalodi@gmail.com/age/24/city/Jodhpur") ~> neo4jRoutes ~>
+      val json_data =
+        """{
+          |"name":"Sandy",
+          |"email":"phalodi@gmail.com",
+          |"age":25,
+          |"city":"Jaipur"
+          |}""".stripMargin
+      Post("/insert", HttpEntity(`application/json`, json_data)) ~>
+      neo4jRoutes ~>
       check {
         responseAs[String].contains("Data is successfully persisted") shouldEqual true
       }

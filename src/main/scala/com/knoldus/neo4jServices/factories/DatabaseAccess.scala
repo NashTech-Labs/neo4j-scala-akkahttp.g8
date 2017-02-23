@@ -3,6 +3,9 @@ package com.knoldus.neo4jServices.factories
 import org.neo4j.driver.v1._
 import com.typesafe.config.ConfigFactory
 
+case class User(name: String, email: String, age: Int, city: String)
+
+
 trait DatabaseAccess {
 
   val config = ConfigFactory.load("application.conf")
@@ -10,8 +13,6 @@ trait DatabaseAccess {
   val userName = config.getString("neo4j.userName")
 
   val userPassword = config.getString("neo4j.userPassword")
-
-  case class User(name: String, email: String, age: Int, city: String)
 
   def insertRecord(user: User): Int = {
     val driver = GraphDatabase.driver(neo4jUrl, AuthTokens.basic(userName, userPassword))
